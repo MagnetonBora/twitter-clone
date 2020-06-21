@@ -6,7 +6,7 @@ First commit.
 - [x] Create hyperlinked api for users
 
 ## 2. Simple API Build
-- [ ] Create models: Tweet, AppUser
+- [x] Create models: Tweet, AppUser
 
 ## 3. Simple Vue Front-end
 - [ ] User Profile
