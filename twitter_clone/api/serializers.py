@@ -14,9 +14,18 @@ class UserSerializer(serializers.ModelSerializer):
 
 class StatusSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
+    quoted_status = serializers.SerializerMethodField()
+
+    def get_quoted_status(self, obj):
+        if obj.quoted_status is not None:
+            return StatusSerializer(obj.quoted_status, many=True, context=self.context).data
+        return None
+
     class Meta:
         model = Status
         fields = [
             'id', 'url', 'user', 'created_at', 'text', 'favourited', 
             'reply_to', 'quoted_status', 'retweeted_status', 'entities' 
         ]
+    
+    
