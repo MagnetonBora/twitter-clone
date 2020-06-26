@@ -1,8 +1,8 @@
 <template>
   <div id="app">
     <nav id="navbar navbar-expand-lg navbar-light bg-light">
-      <router-link to="/">Home</router-link>
-      <router-link to="/about">About</router-link>
+      <!-- <router-link to="/">Home</router-link> -->
+      <!-- <router-link to="/about">About</router-link> -->
     </nav>
     <router-view/>
   </div>
