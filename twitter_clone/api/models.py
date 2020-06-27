@@ -36,9 +36,9 @@ class Status(models.Model):
     user = models.ForeignKey(AppUser, on_delete=models.CASCADE)
     text = models.CharField(max_length=140)
     favourited = models.ManyToManyField(AppUser, related_name='favourites_statuses', blank=True)
-    reply_to = models.ManyToManyField('Status', blank=True, related_name='replies')
-    quoted_status = models.ManyToManyField('Status', blank=True, related_name='quotations')
-    retweeted_status = models.ManyToManyField('Status', blank=True, related_name='retweets')
+    reply_to = models.ForeignKey('Status', blank=True, related_name='replies', on_delete=models.SET_NULL, null=True)
+    quoted_status = models.ForeignKey('Status', blank=True, related_name='quotations', on_delete=models.SET_NULL, null=True)
+    retweeted_status = models.ForeignKey('Status', blank=True, related_name='retweets', on_delete=models.SET_NULL, null=True)
     entities = models.ManyToManyField('Entities', blank=True)
 
     def __str__(self):

@@ -25,7 +25,10 @@ SECRET_KEY = 'cz2jk*d_nei9evo7k(nzrxb$yun5q_f__v(ly_j(gqj516%1hz'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'localhost',
+]
 
 
 # Application definition
@@ -40,6 +43,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'django_filters',
+    'corsheaders',
 
     'api',
     'app',
@@ -48,6 +52,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -127,3 +132,12 @@ STATIC_URL = '/static/'
 
 
 AUTH_USER_MODEL = 'api.AppUser'
+
+
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:8000',
+    'http://localhost:8080',
+    'http://127.0.0.1:8000',
+    'http://127.0.0.1:8080',
+    'http://127.0.0.1',
+]
