@@ -1,48 +1,35 @@
 <template>
-  <div class="quote">
-    <div>
-      <div class="row px-3 my-2">
-        <div class="col">
-          <div class="row mx-0 inline-elements">
-            <div class="">
-              <div v-if="status.user.profile_image">
-                <img :src="status.user.profile_image" class="circle-border"/>
-              </div>
-              <div v-else class="">
-                <div class="circle-border initials">
-                  {{ userInitials }}
-                </div>
-              </div>
-            </div>
-            <div class="username font-weight-bold">
-              {{ status.user.name }}
-            </div>
-            <div v-if="status.user.verified">
-              ✔
-            </div>
-            <div>
-              @{{ status.user.screen_name }}
-            </div>
-            <div>
-              • {{ timeDiff }} ago
-            </div>
-          </div>
-          <div class="row">
-            <div class="col">
-            {{ status.text }}
-            </div>
+  <div>
+    <div class="wrapper">
+      <div class="info">
+        <div v-if="status.user.profile_image">
+          <img :src="status.user.profile_image" class="circle-border"/>
+        </div>
+        <div v-else class="">
+          <div class="circle-border initials">
+            {{ userInitials }}
           </div>
         </div>
+        <div>
+          <TweetInfo :status="status" />
+        </div>
+      </div>
+      <div class="content">
+        {{ status.text }}
       </div>
     </div>
   </div>
 </template>
 
 <script>
-const humanizeDuration = require('humanize-duration');
+import moment from 'moment';
+import TweetInfo from './TweetInfo.vue';
 
 export default {
   name: 'Quote',
+  components: {
+    TweetInfo,
+  },
   props: {
     status: {
       type: Object,
@@ -53,7 +40,8 @@ export default {
     timeDiff() {
       const createdAt = new Date(this.status.created_at);
       const diff = new Date() - createdAt;
-      return humanizeDuration(diff, { largest: 1 });
+      if (diff < 86400000) return moment(createdAt).fromNow();
+      return moment(createdAt).format('DD MMM');
     },
     userInitials() {
       return this.status.user.name.match(/\b(\w)/g).join('');
@@ -63,6 +51,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid lightgrey;
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 15px;
+  margin-right: 15px;
+}
 .circle-border {
   border-radius: 50%;
   width: 20px;
@@ -81,12 +78,11 @@ export default {
   font-size: 10px;
   background-color: rgb(85, 168, 250);
 }
-.inline-elements {
+.info {
   display: flex;
-  align-items: center;
+  flex-direction: row;
 }
-.quote {
-  border: solid 1px lightgray;
-  border-radius: 15px;
+.content {
+  margin-top: 5px;
 }
 </style>

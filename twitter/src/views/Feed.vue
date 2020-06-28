@@ -1,22 +1,20 @@
 <template>
-    <div class="container">
-      <div class="row">
-        <div class="col">
-          <!-- Feed component -->
-        </div>
+  <div class="wrapper">
+    <div>
+      <TweetInput :user="user" />
+    </div>
+    <div v-for="status in statuses" :key="status.id">
+      <div v-if="status.retweeted_status">
+        <Retweet :status="status" class="border"/>
       </div>
-      <div v-for="status in statuses" :key="status.id" class="my-5">
-        <div v-if="status.retweeted_status.length === 1">
-          <Retweet :status="status"/>
-        </div>
-        <div v-else-if="status.reply_to.length === 1">
-          <Reply :status="status"/>
-        </div>
-        <div v-else>
-          <Tweet :status="status"/>
-        </div>
+      <div v-else-if="status.reply_to">
+        <Reply :status="status" class="border"/>
+      </div>
+      <div v-else>
+        <Tweet :status="status" class="border"/>
       </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -24,16 +22,22 @@ import axios from 'axios';
 import Reply from '../components/Reply.vue';
 import Retweet from '../components/Retweet.vue';
 import Tweet from '../components/Tweet.vue';
+import TweetInput from '../components/TweetInput.vue';
 
 export default {
   components: {
     Reply,
     Retweet,
     Tweet,
+    TweetInput,
   },
   data() {
     return {
       statuses: [],
+      user: {
+        name: 'Maciej Nachtygal',
+        screen_name: 'macieyn',
+      },
     };
   },
   methods: {
@@ -54,9 +58,18 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-* {
-  box-sizing: border-box;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+// * {
+//   box-sizing: border-box;
+//   -webkit-font-smoothing: antialiased;
+//   -moz-osx-font-smoothing: grayscale;
+// }
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 600px;
+}
+.border {
+  // outline: 1px solid lightgrey;
+  padding: 5px 0;
 }
 </style>

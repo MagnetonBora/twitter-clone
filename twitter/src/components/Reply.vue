@@ -1,13 +1,18 @@
 <template>
     <div>
+      <Tweet :status="status.reply_to" :reply="true"/>
       <Tweet :status="status" />
-      <Tweet :status="status.reply_to" />
     </div>
 </template>
 
 <script>
+import Tweet from './Tweet.vue';
+
 export default {
   name: 'Reply',
+  components: {
+    Tweet,
+  },
   props: {
     status: {
       type: Object,

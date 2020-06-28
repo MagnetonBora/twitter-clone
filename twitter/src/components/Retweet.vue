@@ -1,15 +1,19 @@
 <template>
-    <div>
-      <div class="row">
-        <div class="text-right" style="min-width: 50px;">
+  <div>
+    <div class="wrapper">
+      <div class="info">
+        <div class="icon">
           <i class="fa fa-retweet" aria-hidden="true"></i>
         </div>
-        <div class="col">
-        {{ status.user.name }} Retweeted
+        <div>
+          {{ status.user.name }} Retweeted
         </div>
       </div>
-      <Tweet :status="status.retweeted_status[0]" />
+      <div>
+        <Tweet :status="status.retweeted_status" />
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -41,5 +45,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.wrapper {
+  display: flex;
+  flex-direction: column;
+}
+.info {
+  display: flex;
+  flex-direction: row !important;
+}
+.icon {
+  width: 50px;
+  margin: 0 15px;
+  text-align: right;
+}
 </style>

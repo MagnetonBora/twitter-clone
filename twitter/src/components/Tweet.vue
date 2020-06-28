@@ -1,90 +1,71 @@
 <template>
   <div>
-    <div class="row">
-      <div class="col-auto px-0">
+    <div class="wrapper">
+      <div class="profile-image">
         <div v-if="status.user.profile_image">
-        <img :src="status.user.profile_image" class="circle-border"/>
+          <img :src="status.user.profile_image" class="circle-border"/>
         </div>
         <div v-else>
           <div class="circle-border initials">
             {{ userInitials }}
           </div>
+          <div v-if="reply" class="line-container">
+            <div class="line">
+            </div>
+          </div>
         </div>
       </div>
-      <div class="col">
-        <div class="row">
-          <div class="pl-3 username font-weight-bold">
-            {{ status.user.name }}
-          </div>
-          <div v-if="status.user.verified">
-            ✔
-          </div>
-          <div>
-            @{{ status.user.screen_name }}
-          </div>
-          <div>
-            • {{ timeDiff }} ago
-          </div>
+      <div class="content">
+        <div class="info">
+          <TweetInfo :status="status" />
         </div>
-        <div class="row">
-          <div class="col">
+        <div class="content">
           {{ status.text }}
-          </div>
+          <Quote v-if="status.quoted_status" :status="status.quoted_status" />
         </div>
-        <div class="row">
-          <div class="col">
-            <Quote :status="status.quoted_status[0]" class="my-2" />
-          </div>
-        </div>
-        <div class="row mt-1">
-          <div class="col">
-            <i class="fa fa-comment-o" aria-hidden="true"></i> {{ status.reply_count }}
-          </div>
-          <div class="col">
-            <i class="fa fa-retweet" aria-hidden="true"></i> {{ status.retweet_count }}
-          </div>
-          <div class="col">
-            <i class="fa fa-heart-o" aria-hidden="true"></i> {{ status.favourite_count }}
-          </div>
-          <div class="col">
-            <i class="fa fa-share-alt" aria-hidden="true"></i>
-          </div>
-        </div>
+        <TweetActionBar :status="status" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import moment from 'moment';
 import Quote from './Quote.vue';
-
-const humanizeDuration = require('humanize-duration');
+import TweetActionBar from './TweetActionBar.vue';
+import TweetInfo from './TweetInfo.vue';
 
 export default {
   name: 'Tweet',
   components: {
     Quote,
+    TweetActionBar,
+    TweetInfo,
   },
   props: {
     status: {
       type: Object,
       required: true,
     },
+    reply: {
+      type: Boolean,
+      required: false,
+    },
   },
   methods: {
   },
   computed: {
     timeDiff() {
-      const createdAt = new Date(this.status.created_at);
-      const diff = new Date() - createdAt;
-      return humanizeDuration(diff, { largest: 1 });
+      const createdAt = moment(this.status.created_at);
+      if (createdAt.isAfter(moment().subtract(1, 'days'))) return createdAt.fromNow(true);
+      if (createdAt.isAfter(moment().startOf('year'))) return createdAt.format('DD MMM');
+      return createdAt.format('DD MMM, YYYY');
     },
     userInitials() {
       return this.status.user.name.match(/\b(\w)/g).join('');
     },
   },
   mounted() {
-    console.log();
   },
 };
 </script>
@@ -106,5 +87,43 @@ export default {
   font-weight: 700;
   font-size: 20px;
   background-color: rgb(85, 168, 250);
+}
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  // border: 1px solid lightgrey;
+  padding: 15px;
+  padding-bottom: 5px;
+  border-radius: 15px;
+  background-color: #fff;
+  box-shadow: 0px 2px 2px 0px rgba(200,200,200,0.5);
+  margin: 5px 0 10px 0;
+}
+.profile-image {
+  margin: 0 15px 0 0;
+}
+.info {
+  display: flex;
+  flex-direction: row;
+}
+.content {
+  width: 100%;
+  margin-top: 5px;
+}
+.line {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid lightskyblue;
+  width: 0;
+  margin: 5px 0;
+  flex: 1;
+}
+.line-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1;
+  min-height: 100%;
 }
 </style>
