@@ -12,30 +12,61 @@
         </div>
       </div>
       <div class="input-box">
-        <textarea placeholder="What's happening?" rows="1"></textarea>
-        <div class="input-toolbox">
-          <div>
-            <i class="fa fa-image icon-item" aria-hidden="true"></i>
-            <i class="fa fa-smile-o icon-item" aria-hidden="true"></i>
+        <form @submit.prevent="sendStatus">
+          <textarea placeholder="What's happening?" rows="1" v-model="text"
+          @input="resizeTextarea" ref="textarea"></textarea>
+          <div class="input-toolbox">
+            <div>
+              <i class="fa fa-image icon-item" aria-hidden="true"></i>
+              <i class="fa fa-smile-o icon-item" aria-hidden="true"></i>
+            </div>
+            <input type="submit" class="btn" value="Tweet">
           </div>
-          <div class="btn">Tweet</div>
-        </div>
+        </form>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import autosize from 'autosize';
+import axios from 'axios';
+
 export default {
   name: 'TweetInput',
-  props: {
-    user: {
-      type: Object,
+  data() {
+    return {
+      text: '',
+      user: this.$store.state.authUser,
+    };
+  },
+  methods: {
+    sendStatus() {
+      axios.post(
+        'http://127.0.0.1:8000/api/tweets/',
+        {
+          text: this.text,
+          user: this.$store.state.authUser.id,
+        },
+        { headers: { Authorization: `Bearer ${this.$store.state.jwt}` } },
+      )
+        .then((res) => {
+          console.log(res.data);
+          this.$emit('add-status', res.data);
+          this.text = '';
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
+    resizeTextarea() {
+      autosize(this.$refs.textarea);
+    },
+
   },
   computed: {
     userInitials() {
-      return this.user.name.match(/\b(\w)/g).join('');
+      return this.$store.state.authUser.name.match(/\b(\w)/g).join('');
     },
   },
 };
@@ -57,7 +88,10 @@ textarea {
   margin: 10px 0;
   font-family: inherit;
   resize: none;
-  overflow: auto;
+  width: 99%;
+  outline: none;
+  height: auto;
+  overflow: none;
 }
 .circle-border {
   border-radius: 50%;

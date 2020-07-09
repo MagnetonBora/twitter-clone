@@ -134,10 +134,13 @@ STATIC_URL = '/static/'
 AUTH_USER_MODEL = 'api.AppUser'
 
 
-CORS_ORIGIN_WHITELIST = [
-    'http://localhost:8000',
-    'http://localhost:8080',
-    'http://127.0.0.1:8000',
-    'http://127.0.0.1:8080',
-    'http://127.0.0.1',
-]
+CORS_ORIGIN_ALLOW_ALL = True
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        # 'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        )
+}

@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Feed from '../views/Feed.vue';
+import Login from '../views/Login.vue';
 
 Vue.use(VueRouter);
 
@@ -10,10 +11,11 @@ const routes = [
     name: 'Feed',
     component: Feed,
   },
-  // {
-  //   path: '/about',
-  //   name: 'About',
-  // },
+  {
+    path: '/login',
+    name: 'Login',
+    component: Login,
+  },
 ];
 
 const router = new VueRouter({

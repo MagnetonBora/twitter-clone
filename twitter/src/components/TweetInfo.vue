@@ -28,13 +28,24 @@ export default {
       required: true,
     },
   },
-  computed: {
-    timeDiff() {
+  data() {
+    return {
+      timeDiff: null,
+    };
+  },
+  methods: {
+    calcTimeDiff() {
       const createdAt = moment(this.status.created_at);
-      if (createdAt.isAfter(moment().subtract(1, 'days'))) return createdAt.fromNow(true);
-      if (createdAt.isAfter(moment().startOf('year'))) return createdAt.format('DD MMM');
-      return createdAt.format('DD MMM, YYYY');
+      if (createdAt.isAfter(moment().subtract(1, 'days'))) this.timeDiff = createdAt.fromNow(true);
+      else if (createdAt.isAfter(moment().startOf('year'))) this.timeDiff = createdAt.format('DD MMM');
+      else this.timeDiff = createdAt.format('DD MMM, YYYY');
     },
+  },
+  computed: {
+  },
+  mounted() {
+    this.calcTimeDiff();
+    setInterval(this.calcTimeDiff, 5000);
   },
 };
 </script>

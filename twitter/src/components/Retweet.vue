@@ -19,8 +19,6 @@
 <script>
 import Tweet from './Tweet.vue';
 
-const humanizeDuration = require('humanize-duration');
-
 export default {
   name: 'Retweet',
   components: {
@@ -30,15 +28,6 @@ export default {
     status: {
       type: Object,
       required: true,
-    },
-  },
-  methods: {
-  },
-  computed: {
-    timeDiff() {
-      const createdAt = new Date(this.status.created_at);
-      const diff = new Date() - createdAt;
-      return humanizeDuration(diff, { largest: 1 });
     },
   },
 };

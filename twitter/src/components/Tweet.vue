@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="wrapper">
+    <div class="wrapper" :class="{ reply: this.is_reply || this.has_reply }">
       <div class="profile-image">
         <div v-if="status.user.profile_image">
           <img :src="status.user.profile_image" class="circle-border"/>
@@ -9,7 +9,7 @@
           <div class="circle-border initials">
             {{ userInitials }}
           </div>
-          <div v-if="reply" class="line-container">
+          <div v-if="has_reply" class="line-container">
             <div class="line">
             </div>
           </div>
@@ -30,7 +30,6 @@
 </template>
 
 <script>
-import moment from 'moment';
 import Quote from './Quote.vue';
 import TweetActionBar from './TweetActionBar.vue';
 import TweetInfo from './TweetInfo.vue';
@@ -47,25 +46,19 @@ export default {
       type: Object,
       required: true,
     },
-    reply: {
+    is_reply: {
+      type: Boolean,
+      required: false,
+    },
+    has_reply: {
       type: Boolean,
       required: false,
     },
   },
-  methods: {
-  },
   computed: {
-    timeDiff() {
-      const createdAt = moment(this.status.created_at);
-      if (createdAt.isAfter(moment().subtract(1, 'days'))) return createdAt.fromNow(true);
-      if (createdAt.isAfter(moment().startOf('year'))) return createdAt.format('DD MMM');
-      return createdAt.format('DD MMM, YYYY');
-    },
     userInitials() {
       return this.status.user.name.match(/\b(\w)/g).join('');
     },
-  },
-  mounted() {
   },
 };
 </script>
@@ -99,6 +92,11 @@ export default {
   box-shadow: 0px 2px 2px 0px rgba(200,200,200,0.5);
   margin: 5px 0 10px 0;
 }
+.reply {
+  box-shadow: none;
+  padding: 0 15px;
+  margin: 0 0;
+}
 .profile-image {
   margin: 0 15px 0 0;
 }
@@ -111,13 +109,10 @@ export default {
   margin-top: 5px;
 }
 .line {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
   border: 1px solid lightskyblue;
+  height: 30px;
   width: 0;
-  margin: 5px 0;
-  flex: 1;
+  margin: 5px auto;
 }
 .line-container {
   display: flex;

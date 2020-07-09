@@ -13,13 +13,21 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class StatusSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)
+    user = UserSerializer()
     quoted_status = serializers.SerializerMethodField()
     retweeted_status = serializers.SerializerMethodField()
     reply_to = serializers.SerializerMethodField()
     retweet_count = serializers.SerializerMethodField()
     reply_count = serializers.SerializerMethodField()
     favourite_count = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Status
+        fields = [
+            'id', 'url', 'user', 'created_at', 'text', 'favourited', 
+            'reply_to', 'quoted_status', 'retweeted_status', 'entities',
+            'retweet_count', 'reply_count', 'favourite_count'
+        ]
 
     def get_quoted_status(self, obj):
         if obj.quoted_status:
@@ -45,12 +53,16 @@ class StatusSerializer(serializers.ModelSerializer):
     def get_favourite_count(self, obj):
         return obj.favourited.count()
 
+    # def create(self, validated_data):
+    #     validated_data.pop('favourited')
+    #     validated_data.pop('entities')
+    #     return Status.objects.create(**validated_data)
+
+    
+class StatusCreateSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Status
         fields = [
-            'id', 'url', 'user', 'created_at', 'text', 'favourited', 
-            'reply_to', 'quoted_status', 'retweeted_status', 'entities',
-            'retweet_count', 'reply_count', 'favourite_count'
+            'id', 'user', 'created_at', 'text', 'reply_to', 'quoted_status', 'retweeted_status', 'entities',
         ]
-    
-    

@@ -33,8 +33,8 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
 class Status(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     created_at = models.DateTimeField(default=timezone.now)
-    user = models.ForeignKey(AppUser, on_delete=models.CASCADE)
-    text = models.CharField(max_length=140)
+    user = models.ForeignKey(AppUser, on_delete=models.CASCADE, related_name='statuses')
+    text = models.CharField(max_length=140, null=True)
     favourited = models.ManyToManyField(AppUser, related_name='favourites_statuses', blank=True)
     reply_to = models.ForeignKey('Status', blank=True, related_name='replies', on_delete=models.SET_NULL, null=True)
     quoted_status = models.ForeignKey('Status', blank=True, related_name='quotations', on_delete=models.SET_NULL, null=True)

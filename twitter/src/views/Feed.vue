@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <div>
-      <TweetInput :user="user" />
+      <TweetInput @add-status="addStatus"/>
     </div>
     <div v-for="status in statuses" :key="status.id">
       <div v-if="status.retweeted_status">
@@ -25,6 +25,7 @@ import Tweet from '../components/Tweet.vue';
 import TweetInput from '../components/TweetInput.vue';
 
 export default {
+  name: 'Feed',
   components: {
     Reply,
     Retweet,
@@ -34,18 +35,30 @@ export default {
   data() {
     return {
       statuses: [],
-      user: {
-        name: 'Maciej Nachtygal',
-        screen_name: 'macieyn',
-      },
     };
   },
   methods: {
     getStatuses() {
-      axios.get('http://127.0.0.1:8000/api/tweets/')
+      axios.get(
+        'http://127.0.0.1:8000/api/tweets/',
+        { headers: { Authorization: `Bearer ${this.$store.state.jwt}` } },
+      )
         .then((response) => {
           console.log(response);
           this.statuses = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    addStatus(status) {
+      axios.get(
+        `http://127.0.0.1:8000/api/tweets/${status.id}`,
+        { headers: { Authorization: `Bearer ${this.$store.state.jwt}` } },
+      )
+        .then((response) => {
+          console.log(response);
+          this.statuses = [response.data, ...this.statuses];
         })
         .catch((error) => {
           console.log(error);
@@ -66,7 +79,8 @@ export default {
 .wrapper {
   display: flex;
   flex-direction: column;
-  width: 600px;
+  width: 100%;
+  max-width: 600px;
 }
 .border {
   // outline: 1px solid lightgrey;
