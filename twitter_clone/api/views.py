@@ -3,13 +3,12 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 # Create your views here.
 
-# ViewSets define the view behavior.
+
 class UserViewSet(viewsets.ModelViewSet):
     queryset = AppUser.objects.all()
     serializer_class = UserSerializer
     
 
-# ViewSets define the view behavior.
 class StatusViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated, )
     queryset = Status.objects.order_by('-created_at')

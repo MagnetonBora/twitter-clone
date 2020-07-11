@@ -1,30 +1,38 @@
 <template lang="html">
-  <form class="login form">
-    <div class="field">
-      <label for="id_username">Username</label>
-      <input
-        v-model="username"
-        type="text"
-        placeholder="Username"
-        autofocus="autofocus"
-        maxlength="150"
-        id="id_username">
+  <div class="container">
+    <div class="login">
+      <div>
+        <h1>Welcome to Tweetbook!</h1>
+        <h3>Please login</h3>
+      </div>
+      <form class="form">
+        <div class="field">
+          <i class="fa fa-user" aria-hidden="true"></i>
+          <input
+            v-model="username"
+            type="text"
+            placeholder="Username"
+            autofocus="autofocus"
+            maxlength="150"
+            id="id_username">
+        </div>
+        <div class="field">
+          <i class="fa fa-lock" aria-hidden="true"></i>
+          <input
+            v-model="password"
+            type="password"
+            placeholder="Password"
+            id="id_password">
+        </div>
+        <button
+          @click.prevent="authenticate"
+          class="button primary"
+          type="submit">
+          Log In
+        </button>
+      </form>
     </div>
-    <div class="field">
-      <label for="id_password">Password</label>
-      <input
-        v-model="password"
-        type="password"
-        placeholder="Password"
-        id="id_password">
-    </div>
-    <button
-      @click.prevent="authenticate"
-      class="button primary"
-      type="submit">
-      Log In
-    </button>
-  </form>
+  </div>
 </template>
 
 <script>
@@ -72,7 +80,7 @@ export default {
           })
             .then((res) => {
               this.$store.commit('setAuthUser', { authUser: res.data, isAuthenticated: true });
-              this.$router.push({ name: 'Feed' });
+              this.$router.push({ name: 'Layout' });
             });
         })
         .catch((error) => {
@@ -86,4 +94,48 @@ export default {
 </script>
 
 <style lang="css">
+.container {
+  display: flex;
+  height: 100vh;
+}
+.login {
+  display: flex;
+  flex-direction: column;
+  max-width: 380px;
+  width: 75%;
+  margin: auto;
+  /* align-items: center; */
+  /* justify-content: center; */
+}
+input {
+  outline: none;
+  border: none;
+  padding: 0 15px;
+  font-size: 16px;
+  background-color: transparent;
+}
+.field {
+  padding: 10px 15px;
+  border-radius: 9999px;
+  background-color: white;
+  margin-bottom: 15px;
+  font-size: 16px;
+}
+button {
+  border: none;
+  padding: 10px 15px;
+  background-color: rgb(85, 168, 250);
+  border-radius: 20px;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  transition: 0.1s;
+  width: 100%;
+}
+button:hover {
+  background-color: rgb(23, 136, 250);
+}
+h1, h3 {
+  text-align: center;
+}
 </style>

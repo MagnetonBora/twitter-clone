@@ -13,6 +13,7 @@ export default new Vuex.Store({
     authUser: {},
     isAuthenticated: false,
     jwt: localStorage.getItem('token'),
+    // jwt: null,
     endpoints: {
       // TODO: Remove hardcoding of dev endpoints
       obtainJWT: 'http://127.0.0.1:8000/api/token/',

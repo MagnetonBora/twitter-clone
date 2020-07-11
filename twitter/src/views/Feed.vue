@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <div>
+    <div v-if="$store.state.isAuthenticated">
       <TweetInput @add-status="addStatus"/>
     </div>
     <div v-for="status in statuses" :key="status.id">
