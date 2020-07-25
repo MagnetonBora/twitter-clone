@@ -4,6 +4,7 @@ from django.utils import timezone
 import uuid
 from .managers import AppUserManager
 
+
 # Create your models here.
 class AppUser(AbstractBaseUser, PermissionsMixin):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -28,7 +29,7 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return f'User {self.name}(@{self.screen_name})'
-    
+
 
 class Status(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -43,6 +44,7 @@ class Status(models.Model):
 
     def __str__(self):
         return f'Tweet created by {self.user} @ {self.created_at}'
-    
+
+
 class Entities(models.Model):
     pass

@@ -30,19 +30,19 @@ class StatusSerializer(serializers.ModelSerializer):
         ]
 
     def get_quoted_status(self, obj):
-        if obj.quoted_status:
-            return StatusSerializer(obj.quoted_status, context=self.context).data
-        return None
+        if not obj.quoted_status:
+            return None
+        return StatusSerializer(obj.quoted_status, context=self.context).data
 
     def get_retweeted_status(self, obj):
-        if obj.retweeted_status:
-            return StatusSerializer(obj.retweeted_status, context=self.context).data
-        return None
+        if not obj.retweeted_status:
+            return None
+        return StatusSerializer(obj.retweeted_status, context=self.context).data
     
     def get_reply_to(self, obj):
-        if obj.reply_to:
-            return StatusSerializer(obj.reply_to, context=self.context).data
-        return None
+        if not obj.reply_to:
+            return None
+        return StatusSerializer(obj.reply_to, context=self.context).data
 
     def get_retweet_count(self, obj):
         return obj.quotations.count()
@@ -52,11 +52,6 @@ class StatusSerializer(serializers.ModelSerializer):
 
     def get_favourite_count(self, obj):
         return obj.favourited.count()
-
-    # def create(self, validated_data):
-    #     validated_data.pop('favourited')
-    #     validated_data.pop('entities')
-    #     return Status.objects.create(**validated_data)
 
     
 class StatusCreateSerializer(serializers.ModelSerializer):
